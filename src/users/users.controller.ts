@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 
 interface User {
   id: string;
@@ -51,5 +59,15 @@ export class UsersController {
     return {
       message: 'User deleted successfully',
     };
+  }
+
+  @Put(':id')
+  updateUser(@Param('id') id: string, @Body() body: Partial<User>) {
+    const user = this.users.find((user) => user.id === id);
+    if (!user) {
+      return { error: 'User not found' };
+    }
+    Object.assign(user, body);
+    return user;
   }
 }
